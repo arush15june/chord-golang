@@ -28,7 +28,7 @@ var (
 	// WorkersShort = flag.Int("w")
 
 	// HostName is the hostname of the physical chord node.
-	HostName = flag.String("host", "127.0.0.1:8000", "Self hostname. Default: :0 (use <hostname>:0 for random port assignment")
+	HostName = flag.String("host", ":0", "Self hostname. Default: :0 (use <hostname>:0 for random port assignment")
 	// HostNameShort = flag.String("h")
 
 	// RemoteHost is the hostname of an existing node in the chord network if join mode is selected.

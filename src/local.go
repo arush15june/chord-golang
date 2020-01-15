@@ -217,17 +217,16 @@ func (node *LocalVNode) FindSuccessors(n int) ([]VNode.VNodeProtocol, error) {
 func (node *LocalVNode) FindSuccessor(id uint64) (VNode.VNodeProtocol, error) {
 	logger.Printf("[%s, %d] Finding Successor: %d\n", node.Hostname(), node.ID(), id)
 
-	if node.ID() == node.successors[0].ID() {
-		logger.Printf("[%s, %d] Node is same as successor\n", node.Hostname(), node.ID())
-		return node, nil
-	}
 	if Util.IsBetweenID(id, node.ID(), node.successors[0].ID()) {
-		logger.Printf("[%s, %d] %d lies between node(%d) and successor(%d)\n", node.Hostname(), node.ID(), id, node.ID(), node.successors[0].ID())
+		logger.Printf("[%s, %d] %d lies between node[%s, %d] and successor[%s, %d]", node.Hostname(), node.ID(), id, node.Hostname(), node.ID(), node.successors[0].Hostname(), node.successors[0].ID())
 		return node.successors[0], nil
 	}
 
 	logger.Printf("[%s, %d] %d not in successor, finding closest predecessor.", node.Hostname(), node.ID(), id)
 	closestNode := node.ClosestPrecedingNode(id)
+	if closestNode.ID() == node.ID() {
+		return node, nil
+	}
 
 	return closestNode.FindSuccessor(id)
 }
@@ -350,7 +349,9 @@ func (node *LocalVNode) Create() error {
 }
 
 // Lookup finds the successor of ID.
-func (node *LocalVNode) Lookup(ID uint64) (string, error) {
+func (node *LocalVNode) Lookup(Key string) (string, error) {
+	ID := Hash.Sum([]byte(Key))
+
 	logger.Printf("[%s, %d] Lookup request for %d\n", node.Hostname(), node.ID(), ID)
 	vnode, err := node.FindSuccessor(ID)
 	if err != nil {

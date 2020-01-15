@@ -100,7 +100,6 @@ func main() {
 		CreateStrategy()
 		break
 	case "join":
-
 		JoinStrategy()
 		break
 	default:
