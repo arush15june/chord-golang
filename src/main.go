@@ -12,8 +12,8 @@ func CreateStrategy() {
 	Hostname := *HostName
 
 	logger.Println("Creating New Ring")
-	logger.Printf("Hostname: %s\n", Hostname)
-	logger.Println("VNode Workers: %s\n", nWorkers)
+	logger.Printf("Hostname: %s", Hostname)
+	logger.Printf("VNode Workers: %d", nWorkers)
 
 	minStabilizeInterval := 15
 	maxStabilizeInterval := 45
@@ -23,12 +23,12 @@ func CreateStrategy() {
 	maxFingers := 6
 
 	logger.Println("VNode Worker Configuration")
-	logger.Printf("Minimum Stabilization Interval: %d\n", minStabilizeInterval)
-	logger.Printf("Maximum Stabilization Interval: %d\n", maxStabilizeInterval)
-	logger.Printf("Finger Fixing Interval: %d\n", fixFingerInterval)
-	logger.Printf("Check Predecessor Interval: %d\n", checkPredInterval)
-	logger.Printf("No of Successors in Successor Table: %d\n", maxSuccessors)
-	logger.Printf("No of Fingers in Finger Table: %d\n", maxFingers)
+	logger.Printf("Minimum Stabilization Interval: %d", minStabilizeInterval)
+	logger.Printf("Maximum Stabilization Interval: %d", maxStabilizeInterval)
+	logger.Printf("Finger Fixing Interval: %d", fixFingerInterval)
+	logger.Printf("Check Predecessor Interval: %d", checkPredInterval)
+	logger.Printf("No of Successors in Successor Table: %d", maxSuccessors)
+	logger.Printf("No of Fingers in Finger Table: %d", maxFingers)
 
 	CreateRing(
 		nWorkers,
@@ -54,9 +54,9 @@ func JoinStrategy() {
 	RemoteHost := *RemoteHost
 
 	logger.Println("Joining Existing Ringg")
-	logger.Printf("Hostname: %s\n", Hostname)
-	logger.Println("VNode Workers: %s\n", nWorkers)
-	logger.Println("Remote Ring: %s\n", RemoteHost)
+	logger.Printf("Hostname: %s", Hostname)
+	logger.Printf("VNode Workers: %d", nWorkers)
+	logger.Printf("Remote Ring: %s", RemoteHost)
 
 	minStabilizeInterval := 15
 	maxStabilizeInterval := 45
@@ -66,12 +66,12 @@ func JoinStrategy() {
 	maxFingers := 6
 
 	logger.Println("VNode Worker Configuration")
-	logger.Printf("Minimum Stabilization Interval: %d\n", minStabilizeInterval)
-	logger.Printf("Maximum Stabilization Interval: %d\n", maxStabilizeInterval)
-	logger.Printf("Finger Fixing Interval: %d\n", fixFingerInterval)
-	logger.Printf("Check Predecessor Interval: %d\n", checkPredInterval)
-	logger.Printf("No of Successors in Successor Table: %d\n", maxSuccessors)
-	logger.Printf("No of Fingers in Finger Table: %d\n", maxFingers)
+	logger.Printf("Minimum Stabilization Interval: %d", minStabilizeInterval)
+	logger.Printf("Maximum Stabilization Interval: %d", maxStabilizeInterval)
+	logger.Printf("Finger Fixing Interval: %d", fixFingerInterval)
+	logger.Printf("Check Predecessor Interval: %d", checkPredInterval)
+	logger.Printf("No of Successors in Successor Table: %d", maxSuccessors)
+	logger.Printf("No of Fingers in Finger Table: %d", maxFingers)
 
 	JoinRing(
 		nWorkers,

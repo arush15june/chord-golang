@@ -108,7 +108,7 @@ func (node *LocalVNode) Stabilize() error {
 		logger.Printf("[%s, %d] Updated successor: %s\n", node.Hostname(), node.ID(), verifySuccesorNode.Hostname())
 	}
 
-	if !(node.successors[0].ID() == node.ID()) {
+	if node.successors[0].ID() != node.ID() {
 		err := node.successors[0].Notify(node)
 		logger.Printf("[%s, %d] Notified %s of VNode.\n", node.Hostname(), node.ID(), node.successors[0].Hostname())
 		return err
@@ -158,7 +158,10 @@ func (node *LocalVNode) FixFinger(fingerNumber int) error {
 
 	var err error
 	node.fingers[fingerIndex], err = node.FindSuccessor(fingerID)
-	logger.Printf("[%s, %d] Finger[%d], %d: %s", node.Hostname(), node.ID(), fingerNumber, fingerID, node.fingers[0].Hostname())
+
+	if node.fingers[fingerIndex] != nil {
+		logger.Printf("[%s, %d] Finger[%d], %d: %s", node.Hostname(), node.ID(), fingerNumber, fingerID, node.fingers[0].Hostname())
+	}
 
 	return err
 }
@@ -177,11 +180,6 @@ func (node *LocalVNode) FixFingersRoutine() error {
 			break
 		}
 
-		if fingerNumber >= node.maxFingers {
-			fingerNumber = 1
-		} else {
-			fingerNumber++
-		}
 		err := node.FixFinger(fingerNumber)
 		if err != nil {
 			// Reset fixing process
@@ -192,6 +190,12 @@ func (node *LocalVNode) FixFingersRoutine() error {
 		fingerTimer := time.NewTimer(time.Duration(node.fixFingerInterval) * time.Second)
 		select {
 		case <-fingerTimer.C:
+		}
+
+		if fingerNumber >= node.maxFingers {
+			fingerNumber = 1
+		} else {
+			fingerNumber++
 		}
 	}
 
@@ -231,7 +235,7 @@ func (node *LocalVNode) FindSuccessor(id uint64) (VNode.VNodeProtocol, error) {
 // ClosestPrecedingNode finds the closest preceding node to the ID in the FingerTable.
 func (node *LocalVNode) ClosestPrecedingNode(id uint64) VNode.VNodeProtocol {
 	for _, finger := range node.fingers {
-		if !(finger == nil) {
+		if finger != nil {
 			if Util.IsBetweenID(finger.ID(), node.ID(), id) {
 				logger.Printf("[%s, %d] closest preceeding node for %d: %s, %d", node.Hostname(), node.ID(), id, finger.Hostname(), finger.ID())
 				return finger
@@ -264,9 +268,9 @@ func (node *LocalVNode) CheckPredecessor() error {
 
 	err := node.predecessor.Ping()
 	if err != nil {
-		logger.Printf("[%s, %d] Predecessor %s dead.", node.Hostname(), node.ID(), node.predecessor.Hostname())
+		errLog := fmt.Sprintf("[%s, %d] Predecessor %s dead.", node.Hostname(), node.ID(), node.predecessor.Hostname())
+		logger.Println(errLog)
 		node.predecessor = nil
-		errLog := fmt.Sprintf("Predecessor %s did not respond.", node.predecessor.Hostname)
 		return errors.New(errLog)
 	}
 
@@ -323,9 +327,9 @@ func (node *LocalVNode) Join(chordVNode VNode.VNodeProtocol) error {
 	node.successors[0], err = chordVNode.FindSuccessor(node.ID())
 	logger.Printf("[%s, %d] Found first successor [%s, %d]", node.Hostname(), node.ID(), node.successors[0].Hostname(), node.successors[0].ID())
 
-	for i := 0; i < node.maxFingers; i++ {
-		node.fingers[i] = node.successors[0]
-	}
+	// for i := 0; i < node.maxFingers; i++ {
+	// 	node.fingers[i] = node.successors[0]
+	// }
 
 	node.successors[0].Notify(node)
 
@@ -338,9 +342,9 @@ func (node *LocalVNode) Create() error {
 
 	node.predecessor = nil
 	node.successors[0] = node
-	for i := 0; i < node.maxFingers; i++ {
-		node.fingers[i] = node
-	}
+	// for i := 0; i < node.maxFingers; i++ {
+	// 	node.fingers[i] = node
+	// }
 
 	return nil
 }

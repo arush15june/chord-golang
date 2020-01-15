@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/rpc"
 
 	RPC "github.com/arush15june/chord-golang/src/pkg/rpc"
@@ -32,13 +33,13 @@ func (rpcInstance *ChordTCPRPCClient) InitClient() error {
 
 	client, err := rpc.Dial("tcp", rpcInstance.Hostname)
 	if err != nil {
-		panic(err)
+		return errors.New("client is dead")
 	}
 	rpcInstance.client = client
 
 	pingErr := rpcInstance.Ping()
 	if pingErr != nil {
-		panic(err)
+		return errors.New("client is dead")
 	}
 
 	return nil
@@ -46,12 +47,17 @@ func (rpcInstance *ChordTCPRPCClient) InitClient() error {
 
 // FindSuccessor calls FindSuccessorRPC on a remote node and returns the successor.
 func (rpc *ChordTCPRPCClient) FindSuccessor(ID uint64) (VNode.VNodeProtocol, error) {
-	rpc.InitClient()
+	var err error
+
+	err = rpc.InitClient()
+	if err != nil {
+		return nil, err
+	}
 
 	args := &RPC.FindSuccRpcArgs{ID: ID}
 	reply := &RPC.FindSuccRpcReply{}
 
-	err := rpc.client.Call(findSuccRPCName, args, reply)
+	err = rpc.client.Call(findSuccRPCName, args, reply)
 
 	if err != nil {
 		return nil, err
@@ -61,11 +67,17 @@ func (rpc *ChordTCPRPCClient) FindSuccessor(ID uint64) (VNode.VNodeProtocol, err
 
 // Notify calls NotifyRPC on the remote node and returns the successor node.
 func (rpc *ChordTCPRPCClient) Notify(vnode VNode.VNodeProtocol) error {
-	rpc.InitClient()
+	var err error
+
+	err = rpc.InitClient()
+	if err != nil {
+		return err
+	}
+
 	args := &RPC.NotifyRpcArgs{Hostname: vnode.Hostname()}
 	reply := &RPC.NotifyRpcReply{}
 
-	err := rpc.client.Call(notifyRPCName, args, reply)
+	err = rpc.client.Call(notifyRPCName, args, reply)
 
 	if err != nil {
 		return err
@@ -76,11 +88,17 @@ func (rpc *ChordTCPRPCClient) Notify(vnode VNode.VNodeProtocol) error {
 
 // Ping calls PingRPC on the remote node.
 func (rpc *ChordTCPRPCClient) Ping() error {
-	rpc.InitClient()
+	var err error
+
+	err = rpc.InitClient()
+	if err != nil {
+		return err
+	}
+
 	args := &RPC.PingRpcArgs{}
 	reply := &RPC.PingRpcReply{}
 
-	err := rpc.client.Call(pingRPCName, args, reply)
+	err = rpc.client.Call(pingRPCName, args, reply)
 	if err != nil {
 		return err
 	}
@@ -90,11 +108,17 @@ func (rpc *ChordTCPRPCClient) Ping() error {
 
 // GetPredecessor calls GetPredecessorRPC on the remote node and returns the predecessor.
 func (rpc *ChordTCPRPCClient) GetPredecessor() (VNode.VNodeProtocol, error) {
-	rpc.InitClient()
+	var err error
+
+	err = rpc.InitClient()
+	if err != nil {
+		return nil, err
+	}
+
 	args := &RPC.GetPredecessorRpcArgs{}
 	reply := &RPC.GetPredecessorRpcReply{}
 
-	err := rpc.client.Call(getPredRPCName, args, reply)
+	err = rpc.client.Call(getPredRPCName, args, reply)
 	if err != nil {
 		return nil, err
 	}

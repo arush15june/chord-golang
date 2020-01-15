@@ -4,13 +4,20 @@ package hash
 // Wraps FNV Hash.
 
 import (
-	"hash/fnv"
+	"bytes"
+	"crypto/sha1"
+	"encoding/binary"
 )
 
 // Sum computes the FNV hash of data.
 func Sum(data []byte) uint64 {
-	fnv := fnv.New64()
-	fnv.Write(data)
+	var id uint64
 
-	return fnv.Sum64()
+	hasher := sha1.New()
+	hasher.Write(data)
+
+	data = hasher.Sum(nil)
+	binary.Read(bytes.NewBuffer(data[:8]), binary.LittleEndian, &id)
+
+	return id
 }
