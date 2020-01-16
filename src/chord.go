@@ -33,7 +33,7 @@ func NewLocalVNodeWithRPC(hostname string, minStabilizeInterval int, maxStabiliz
 func JoinRing(nWorkers int, hostname string, remoteHostName string, minStabilizeInterval int, maxStabilizeInterval int, fixFingerInterval int, checkPredInterval, maxSuccessors int, maxFingers int) error {
 	remoteVNode := InitRemoteVNode(remoteHostName)
 
-	workers := make([]*LocalVNode, nWorkers)
+	workers = make([]*LocalVNode, nWorkers)
 	for i := 0; i < nWorkers; i++ {
 		vnode, _ := NewLocalVNodeWithRPC(
 			hostname,
@@ -59,7 +59,7 @@ func JoinRing(nWorkers int, hostname string, remoteHostName string, minStabilize
 // CreateRing creates a Chord ring in one of the local virtual
 // and joins all other local nodes to it.
 func CreateRing(nWorkers int, hostname string, minStabilizeInterval int, maxStabilizeInterval int, fixFingerInterval int, checkPredInterval int, maxSuccessors int, maxFingers int) error {
-	workers := make([]*LocalVNode, nWorkers)
+	workers = make([]*LocalVNode, nWorkers)
 	for i := 0; i < nWorkers; i++ {
 		vnode, _ := NewLocalVNodeWithRPC(
 			hostname,
@@ -85,4 +85,8 @@ func CreateRing(nWorkers int, hostname string, minStabilizeInterval int, maxStab
 	}
 
 	return nil
+}
+
+func LookupKey(Key string) (string, error) {
+	return workers[0].Lookup(Key)
 }

@@ -16,6 +16,9 @@ const (
 
 	// DefaultVirtualNodes is the default number of virtual nodes to map to the physical node.
 	DefaultVirtualNodes = 1
+
+	// DefaultApiPort
+	DefaultApiPort = "8090"
 )
 
 var (
@@ -34,4 +37,7 @@ var (
 	// RemoteHost is the hostname of an existing node in the chord network if join mode is selected.
 	RemoteHost = flag.String("rhost", "127.0.0.1:8000", "Remote chord node to join.")
 	// RemoteHostShort = flag.String("r")
+
+	// ApiPort sets the HTTP API port.
+	ApiPort = flag.String("httpport", DefaultApiPort, "REST API Port.")
 )

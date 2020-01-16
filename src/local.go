@@ -353,6 +353,7 @@ func (node *LocalVNode) Lookup(Key string) (string, error) {
 	ID := Hash.Sum([]byte(Key))
 
 	logger.Printf("[%s, %d] Lookup request for %d\n", node.Hostname(), node.ID(), ID)
+
 	vnode, err := node.FindSuccessor(ID)
 	if err != nil {
 		logger.Printf("[%s, %d] Error occured: %s\n", node.Hostname(), node.ID(), err)

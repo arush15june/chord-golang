@@ -41,10 +41,6 @@ func CreateStrategy() {
 		maxFingers,
 	)
 
-	for {
-
-	}
-
 }
 
 // JoinStrategy is used to join an existing chord ring.
@@ -85,9 +81,6 @@ func JoinStrategy() {
 		maxFingers,
 	)
 
-	for {
-
-	}
 }
 
 func main() {
@@ -104,6 +97,11 @@ func main() {
 		break
 	default:
 		break
+	}
+
+	InitHttpServer()
+	for {
+
 	}
 
 }
