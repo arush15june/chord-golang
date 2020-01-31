@@ -1,7 +1,7 @@
 package hash
 
 // Wrapper Functions for Hashing.
-// Wraps FNV Hash.
+// Wraps SHA1 Hash.
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"encoding/binary"
 )
 
-// Sum computes the FNV hash of data.
+// Sum computes the SHA1 hash of data and extracts a 64 bit integer out of it.
 func Sum(data []byte) uint64 {
 	var id uint64
 
