@@ -317,10 +317,6 @@ func (node *LocalVNode) Join(chordVNode VNode.VNodeProtocol) error {
 	node.successors[0], err = chordVNode.FindSuccessor(node.ID())
 	logger.Printf("[%s, %d] Found first successor [%s, %d]", node.Hostname(), node.ID(), node.successors[0].Hostname(), node.successors[0].ID())
 
-	// for i := 0; i < node.maxFingers; i++ {
-	// 	node.fingers[i] = node.successors[0]
-	// }
-
 	node.successors[0].Notify(node)
 
 	return err
