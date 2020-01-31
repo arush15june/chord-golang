@@ -123,21 +123,17 @@ func (node *LocalVNode) StabilizeRoutine() error {
 	exit := false
 
 	for {
-		select {
-		case <-node.stopStabilizeChan:
-			exit = true
-		default:
-		}
-		if exit {
-			break
-		}
-
 		node.Stabilize()
 
 		interval := Util.GetRandomBetween(node.minStabilizeInterval, node.maxStabilizeInterval)
 		timer := time.NewTimer(time.Duration(interval) * time.Second)
 		select {
 		case <-timer.C:
+		case <-node.stopStabilizeChan:
+			exit = true
+		}
+		if exit {
+			break
 		}
 	}
 	return nil
@@ -170,16 +166,8 @@ func (node *LocalVNode) FixFinger(fingerNumber int) error {
 func (node *LocalVNode) FixFingersRoutine() error {
 	fingerNumber := 1
 	exit := false
-	for {
-		select {
-		case <-node.stopFixFingerChan:
-			exit = true
-		default:
-		}
-		if exit {
-			break
-		}
 
+	for {
 		err := node.FixFinger(fingerNumber)
 		if err != nil {
 			// Reset fixing process
@@ -190,6 +178,11 @@ func (node *LocalVNode) FixFingersRoutine() error {
 		fingerTimer := time.NewTimer(time.Duration(node.fixFingerInterval) * time.Second)
 		select {
 		case <-fingerTimer.C:
+		case <-node.stopFixFingerChan:
+			exit = true
+		}
+		if exit {
+			break
 		}
 
 		if fingerNumber >= node.maxFingers {
@@ -279,22 +272,20 @@ func (node *LocalVNode) CheckPredecessor() error {
 // CheckPredecessorRoutine checks the liveness of predecessor periodically.
 func (node *LocalVNode) CheckPredecessorRoutine() error {
 	exit := false
-	for {
-		select {
-		case <-node.stopCheckPredChan:
-			exit = true
-		default:
-		}
-		if exit {
-			break
-		}
 
+	for {
 		node.CheckPredecessor()
 
 		interval := node.checkPredInterval
 		timer := time.NewTimer(time.Duration(interval) * time.Second)
 		select {
 		case <-timer.C:
+		case <-node.stopCheckPredChan:
+			exit = true
+		}
+
+		if exit {
+			break
 		}
 	}
 
