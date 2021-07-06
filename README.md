@@ -1,6 +1,6 @@
 # chord-golang (WIP)
 
-Implementation of the Chord protocol as described in the paper written in Golang: [Chord: A Scalable Peer-to-peer Lookup Protocol for Internet Applications](https://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf)
+Implementation of the Chord protocol as described in the paper written in Golang: [Chord: A Scalable Peer-to-peer Lookup Protocol for Internet Applications](https://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf). I write about this project in my blog [here](https://arush15june.github.io/posts/2020-28-01-chord/).
 
 ## Implementation
 
@@ -40,4 +40,3 @@ VNode.VNodeProtcol ---> Generic Interface to the Chord Protocol.
 - Different RPC implementations.
 - Lookup HTTP Server.
 - Hostname, ports, polishing.
-- blog article
